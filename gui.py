@@ -4,38 +4,29 @@ import re
 import requests
 import json 
 import tkcalendar as tcal
-import inst_326_project_2
+import get_address
+import get_info
+import random
 
-#12/4/20 update 
+#101 Halpine Road Rockville MD
+
 
 LARGE_FONT = ("Times")
-
-
-class user_information:
-    def __init__(self):
-        self.user_first = ""
-        self.user_last =  ""
-        self.user_address = "" 
-        self.user_item = ""
-        self.delivery_date = ""
 
 class Main(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        self.default = user_information()
         
         tk.Tk.wm_title(self, "Shopping App")
         
         container = tk.Frame(self)
-        
         container.pack(side="top", fill="both", expand = True)
-        
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
         
         self.frames = {}
         
-        for F in (StartPage, PageOne, PageTwo, PageThree, PageFour, PageFive, PageSix):
+        for F in (StartPage, PageOne, PageTwo, PageThree, PageFive, PageSix):
             frame = F(container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -46,211 +37,260 @@ class Main(tk.Tk):
         
         frame = self.frames[cont]
         frame.tkraise()
-        
+    
+    def get_page(self, page_name):
+        for page in self.frames.values():
+            if str(page.__class__.__name__) == page_name:
+                return page
+        return None      
+    
 class StartPage(tk.Frame):
     
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.controller = controller
+        self.make_widget(controller)
+        
+    def make_widget(self, controller):
         label = tk.Label(self, text="Welcome to our app!", font=LARGE_FONT)
         label.pack(pady=10,padx=10)
         
-        button1 = ttk.Button(self, text="Next",
-                            command=lambda: controller.show_frame(PageOne))
-        button1.pack()
+        next_page = ttk.Button(self, text="Next", command=lambda: controller.show_frame(PageOne))
+        next_page.pack()
         
-        button2 = ttk.Button(self, text="Quit", command=quit)
-        button2.pack()
+        quit_program = ttk.Button(self, text="Quit", command=quit)
+        quit_program.pack()
 
 class PageOne(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.controller = controller               
+      
         title = tk.Label(self, text="Dropoff Location?", font=LARGE_FONT)
         title.pack(pady=10,padx=10)
         
         label1 = tk.Label(self, text="Address:")
         label1.pack()
-        entry1 = tk.Entry(self)
-        entry1.pack()
         
-        #save address to user information class
+        self.address = tk.Entry(self)
+        self.address.pack()
         
-        submit = ttk.Button(self, text="Next", command=lambda: controller.show_frame(PageTwo))
-        submit.pack()
+        next_page = ttk.Button(self, text="Next", command=lambda: self.next_page())
+        next_page.pack()
         
-        button1 = ttk.Button(self, text="Back to Home",
+        back = ttk.Button(self, text="Back",
                             command=lambda: controller.show_frame(StartPage))
-        button1.pack()
+        back.pack()
         
-        button2 = ttk.Button(self, text="Quit", command=quit)
-        button2.pack()
+        home = ttk.Button(self, text="Back to Home",
+                            command=lambda: controller.show_frame(StartPage))
+        home.pack()
         
+        quit_program = ttk.Button(self, text="Quit", command=quit)
+        quit_program.pack()
+    
+    def next_page(self):
+        self.controller.show_frame(PageTwo)
         
 class PageTwo(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-                
+        self.controller = controller
+        
         title = tk.Label(self, text="What type of place are you trying to buy from?", font=LARGE_FONT)
         title.pack(pady=10,padx=10)
-        #title.grid(row=0, column=2, columnspan=3)
         
         label1 = tk.Label(self, text="Search:")
         label1.pack()
-        #label1.grid(row=1,column=2, columnspan=1)
-        entry1 = tk.Entry(self)
-        entry1.pack()
+
+        self.type_of_place = tk.Entry(self)
+        self.type_of_place.pack()
+
+        next_page = ttk.Button(self, text="Next", command=lambda: self.next_page())
+        next_page.pack()
         
-        #save type of place to user information class
-        
-        #entry1.grid(row=1,column=2,columnspan=3)
-        submit = ttk.Button(self, text="Next", command=lambda: controller.show_frame(PageThree))
-        submit.pack()
-        #submit.grid(row=1,column=5)
-        
-        button1 = ttk.Button(self, text="Back",
+        back = ttk.Button(self, text="Back",
                             command=lambda: controller.show_frame(PageOne))
-        button1.pack()
-        #button1.grid(row=2, column=2)
+        back.pack()
         
-        button2 = ttk.Button(self, text="Back to Home",
+        home = ttk.Button(self, text="Back to Home",
                             command=lambda: controller.show_frame(StartPage))
-        button2.pack()
-        #button2.grid(row=2,column=3)
+        home.pack()
         
-        button3 = ttk.Button(self, text="Quit", command=quit)
-        button3.pack()
-        #button3.grid(row=2,column=4)
+        quit_program = ttk.Button(self, text="Quit", command=quit)
+        quit_program.pack()
         
+    def next_page(self):
+        self.controller.show_frame(PageThree)
+            
 class PageThree(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.controller = controller
+  
+        title = tk.Label(self, text="What type of item do you want?", font=LARGE_FONT)
+        title.pack(pady=10,padx=10)
         
-        label = tk.Label(self, text="What type of item do you want?", font=LARGE_FONT)
-        label.pack(pady=10,padx=10)
-        
-        label1 = tk.Label(self, text="Search:")
-        label1.pack()
-        #label1.grid(row=1,column=2, columnspan=1)
-        entry1 = tk.Entry(self)
-        entry1.pack()
-        #entry1.grid(row=1,column=2,columnspan=3)
-        
-        #save item to user information class
-                
-        submit = ttk.Button(self, text="Next", command=lambda: controller.show_frame(PageFour))
-        submit.pack()
-        #submit.grid(row=1,column=5)
-        
-        button1 = ttk.Button(self, text="Back",
-                            command=lambda: controller.show_frame(PageTwo))
-        button1.pack()
-        #button1.grid(row=2, column=2)
-        
-        button2 = ttk.Button(self, text="Back to Home",
-                            command=lambda: controller.show_frame(StartPage))
-        button2.pack()
-        #button2.grid(row=2,column=3)
-        
-        button3 = ttk.Button(self, text="Quit", command=quit)
-        button3.pack()
-        #button3.grid(row=2,column=4)
-        
-class PageFour(tk.Frame):
+        search = tk.Label(self, text="Search:")
+        search.pack()
 
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        self.type_of_item = tk.Entry(self)
+        self.type_of_item.pack()
+                
+        next_page = ttk.Button(self, text="Next", command=lambda: self.next_page())
+        next_page.pack()
         
-        label = tk.Label(self, text="What store did you purchase from?", font=LARGE_FONT)
-        label.pack(pady=10,padx=10)
+        back = ttk.Button(self, text="Back",
+                            command=lambda: controller.show_frame(PageTwo))
+        back.pack()
         
-        #dropdown box, save store to user information class
-        
-        
-        button1 = ttk.Button(self, text="Next", command=lambda: controller.show_frame(PageFive))
-        button1.pack()
-        
-        button2 = ttk.Button(self, text="Back",
-                            command=lambda: controller.show_frame(PageThree))
-        button2.pack()
-        #button1.grid(row=2, column=2)
-        
-        button3 = ttk.Button(self, text="Back to Home",
+        home = ttk.Button(self, text="Back to Home",
                             command=lambda: controller.show_frame(StartPage))
-        button3.pack()
-        #button2.grid(row=2,column=3)
+        home.pack()
         
-        button4 = ttk.Button(self, text="Quit", command=quit)
-        button4.pack()
-        #button3.grid(row=2,column=4)
+        quit_program = ttk.Button(self, text="Quit", command=quit)
+        quit_program.pack()
+        
+    def next_page(self):
+        self.controller.show_frame(PageFive)
+        
+#class PageFour(tk.Frame):
+
+    #def __init__(self, parent, controller):
+        #tk.Frame.__init__(self, parent)
+        #self.controller = controller
+        
+        #label = tk.Label(self, text="What store did you purchase from?", font=LARGE_FONT)
+        #label.pack(pady=10,padx=10)
+        
+        #next_page = ttk.Button(self, text="Next", command=lambda: controller.show_frame(PageFive))
+        #next_page.pack()
+        
+        #back = ttk.Button(self, text="Back",
+                            #command=lambda: controller.show_frame(PageTwo))
+        #back.pack()
+        
+        #home = ttk.Button(self, text="Back to Home",
+                            #command=lambda: controller.show_frame(StartPage))
+        #home.pack()
+        
+        #quit_program = ttk.Button(self, text="Quit", command=quit)
+        #quit_program.pack()
+
         
 class PageFive(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        
+        self.controller = controller
+
         label = tk.Label(self, text="Contant Information", font=LARGE_FONT)
         label.pack(pady=10,padx=10)
         
-        first_name = tk.Label(self, text="Full Name:")
-        first_name.pack()
-        entry1 = tk.Entry(self)
-        entry1.pack()
-        last_name = tk.Label(self, text="Email Address:")
-        last_name.pack()
-        entry2 = tk.Entry(self)
-        entry2.pack()
-        phone_number =tk.Label(self, text="Phone Number:")
+        full_name = tk.Label(self, text="Full Name:")
+        full_name.pack()
+        
+        self.name_entry = tk.Entry(self)
+        self.name_entry.pack()
+        
+        email_address = tk.Label(self, text="Email Address:")
+        email_address.pack()
+        
+        self.email = tk.Entry(self)
+        self.email.pack()
+        
+        phone_number = tk.Label(self, text="Phone Number:")
         phone_number.pack()
-        entry3 = tk.Entry(self)
-        entry3.pack()
         
-        #save full name, email and phone to user information class. Bring address from user information class to PageFive       
+        self.phone = tk.Entry(self)
+        self.phone.pack()
         
-        delivery_date = tk.Label(self, text="Select Delivery Date")
-        delivery_date.pack()
+        self.myCal = tcal.Calendar(self, setmode = "day'", date_pattern = "mm/dd/yy") #self. makes attribute - ref anytime in class
+        self.myCal.pack(pady = 10)
         
-        myCal = tcal.Calendar(self, setmode = "day'", date_pattern = "mm/dd/yy")
-        myCal.pack(pady = 10)
+        next_page = ttk.Button(self, text = "Next", command=lambda: controller.show_frame(PageSix)) #remove () to not run function by default
+        next_page.pack()
         
-        #save myCal value to user information class
-        
-        openCal = tk.Button(self, text = "Confirm", fg = "black", bg = "snow", command=lambda: controller.show_frame(PageSix))
-        openCal.pack(pady = 10)
-
         
         button2 = ttk.Button(self, text="Back",
                             command=lambda: controller.show_frame(PageThree))
         button2.pack()
-        #button1.grid(row=2, column=2)
         
         button3 = ttk.Button(self, text="Back to Home",
                             command=lambda: controller.show_frame(StartPage))
         button3.pack()
-        #button2.grid(row=2,column=3)
         
         button4 = ttk.Button(self, text="Quit", command=quit)
         button4.pack()
-        #button3.grid(row=2,column=4)
-
+        
+    def next_page(self):
+        self.controller.show_frame(PageSix)
 
 class PageSix(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Receipt", font=LARGE_FONT)
-        label.pack(pady=10,padx=10)
+        self.controller = controller
+        
+        title = tk.Label(self, text="Receipt", font=LARGE_FONT)
+        title.pack(pady=10,padx=10)
+        
+        button3 = ttk.Button(self, text="Show Receipt", command=lambda: self.show_information())
+        button3.pack()
+
+        
+    def show_information(self):
+        pageone = self.controller.get_page("PageOne")
+        user_address = pageone.address.get()
+        
+        pagetwo = self.controller.get_page("PageTwo")
+        type_of_place = pagetwo.type_of_place.get()
+        
+        pagethree = self.controller.get_page("PageThree")
+        type_of_item = pagethree.type_of_item.get()
         
         
+        pagefive = self.controller.get_page("PageFive")
+        name = pagefive.name_entry.get()
+        email_address = pagefive.email.get()
+        phone_number = pagefive.phone.get()
+        date_picked = pagefive.myCal.get_date()
         
-        button1 = ttk.Button(self, text="Next",
-                            command=lambda: controller.show_frame(PageOne))
+        receipt_order_num = tk.Label(self,text = ('Order #'+str(random.randint(1000,6000))))
+        receipt_order_num.pack()
+        
+        receipt1 = tk.Label(self, text=(f"Your Name: {name}"))
+        receipt1.pack()
+        
+        receipt2 = tk.Label(self, text=(f"Your Address: {user_address}"))
+        receipt2.pack()
+        
+        receipt3 = tk.Label(self, text=(f"Your Email: {email_address}"))
+        receipt3.pack()
+        
+        receipt4 = tk.Label(self, text=(f"Your Number: {phone_number}"))
+        receipt4.pack()
+        
+        receipt5 = tk.Label(self, text=(f"Delivery Date: {date_picked}"))
+        receipt5.pack()
+        
+        receipt6 = tk.Label(self, text=(f"Store Type: {type_of_place}"))
+        receipt6.pack()
+        
+        receipt7 = tk.Label(self, text=(f"Item Type: {type_of_item}"))
+        receipt7.pack()
+        
+        button1 = ttk.Button(self, text="Back", command=lambda: self.controller.show_frame(PageFive))
         button1.pack()
         
         button2 = ttk.Button(self, text="Quit", command=quit)
         button2.pack()
-
-
+        
+        
+        get_info.get_info(user_address,type_of_place,type_of_item)
+        
 if __name__ == '__main__':
     app = Main()
     app.mainloop()
