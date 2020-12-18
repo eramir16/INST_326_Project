@@ -7,7 +7,21 @@ from tkinter import*
 
 api_key = 'AIzaSyAPrM0MRPX0xq7yUuF94oot5EkcKT8iuCc'
 def get_address(get_address,place,item):
-  #get_address = input('Please enter the address you would like to get delievered to: ' ) 
+  """ accessing three of google's apis to get customers pickup location and item around address within a 9500m (6miles) radius. 
+  
+  Args: 
+    get_address(str): customers address
+    place(str): customers entry of category of place. (For example, restaurant, hardware, )
+    item(str):
+    
+  Side effect:
+    price(int): prints price of delivery service 
+    get_dist(str): prints distance from location to address
+    get_time(int): prints time from location to address
+    
+   
+  """
+  
   separate = re.findall(r'(\d+\s.*)\s(\w+)\s([A-Z]{2})',get_address)
   
   street_info = list(separate[0][0].split(' '))
@@ -16,16 +30,15 @@ def get_address(get_address,place,item):
   street_suffix = street_info[2]
   city_name = separate[0][1]
   state_name = separate[0][2]
-  url_get_att = 'https://maps.googleapis.com/maps/api/geocode/json?address='+house_number+street_name+street_suffix+','+city_name+','+state_name+'&key='+api_key
-  #print(url_get_att)
   
+  #geocode api to get lnt and lng of customers address
+  url_get_att = 'https://maps.googleapis.com/maps/api/geocode/json?address='+house_number+street_name+street_suffix+','+city_name+','+state_name+'&key='+api_key
   
   #------------------------------------------------------------------------
   
   response = requests.get(url_get_att)
   data = json.loads(response.text)
   address_place_id = data['results'][0]['place_id']
-  #print(address_place_id)
 
   get_cords = data['results'][0]['geometry']['location']
   get_lat = get_cords['lat']
@@ -34,29 +47,26 @@ def get_address(get_address,place,item):
   #-------------------------------------------------------------------------
   
   type_place = place
-  get_item = item
-  get_place = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+str(get_lat)+','+str(get_lng)+'&radius=9500&type='+type_place+'&keyword='+get_item+'&key='+api_key
+  type_of_food = item
   
+  #once tupe of place and what item the customer is looking for, take the information and use google's place ID api to get the stores 
   
-
+  get_restaurants = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+str(get_lat)+','+str(get_lng)+'&radius=9500&type='+type_place+'&keyword='+type_of_food+'&key='+api_key
   
-
-  response_two = requests.get(get_place)
+  response_two = requests.get(get_restaurants)
   data_two = json.loads(response_two.text)
-  #print(get_place)
+
   names = []
   place_ids = []
-  for i in data_two['results']:
+  for i in data_two['results']:     
     
-    names.append(i['name'])
+    names.append(i['name']) #get results of places into a list
     
   for x in data_two['results']:
-      place_ids.append(x['place_id'])
-  #print(names)
-  #print(place_ids)
+      place_ids.append(x['place_id'])   #get each locations place_id 
   
   
-
+  #tkinter pop up list 
   root=Tk()
   sizex = 600
   sizey = 400
@@ -66,14 +76,27 @@ def get_address(get_address,place,item):
   
 
   def CurSelet(evt):
+      """ Tkinter pop up page of list.
+      
+  
+        Args: 
+          evt : bind mylistbox 
+        Side effect:
+          Displays a tkinter page with all of the places in list , allowing user to select a place
+    
+      """
+    
+    
       value=str((mylistbox.get(mylistbox.curselection())))
-      #print(value)
+
       new_dict = dict(zip(names, place_ids))
-      #print(new_dict)
+
       
       for x,y in new_dict.items():
           if value == x:
-              #print(y)
+              
+              #each address has their unique place ID 
+              #by using the customers ID and place ID, I can find the distance and time 
               url_time_and_distance = 'https://maps.googleapis.com/maps/api/directions/json?origin=place_id:'+y+'&destination=place_id:'+address_place_id+'&key='+api_key
               response_three = requests.get(url_time_and_distance)
               data_three = json.loads(response_three.text)
@@ -89,6 +112,7 @@ def get_address(get_address,place,item):
               price = 4.5 + fuelCharge
       
               print('Price: ',price)
+              print(get_dist)
               print(get_time)
 
   mylistbox=Listbox(root,width=60,height=10,font=('times',13))
@@ -107,4 +131,10 @@ if __name__ == "__main__":
     
   get_address(get_address,get_address,get_address)
     
-  
+   
+
+
+
+
+
+

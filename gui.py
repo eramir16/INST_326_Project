@@ -5,16 +5,24 @@ import requests
 import json 
 import tkcalendar as tcal
 import get_address
-import get_info
 import random
 
 #101 Halpine Road Rockville MD
 
-
 LARGE_FONT = ("Times")
 
 class Main(tk.Tk):
+    """A class for the main functions of the GUI, shows StartPage by default.
+    
+    Attributes:
+        frames(dict): Holds all the frames within it
+    """
     def __init__(self, *args, **kwargs):
+        """Initializes constructor for class.
+            
+        Attributes:
+            frames(dict): Holds all the frames within it
+        """
         tk.Tk.__init__(self, *args, **kwargs)
         
         tk.Tk.wm_title(self, "Shopping App")
@@ -26,7 +34,7 @@ class Main(tk.Tk):
         
         self.frames = {}
         
-        for F in (StartPage, PageOne, PageTwo, PageThree, PageFive, PageSix):
+        for F in (StartPage, PageOne, PageTwo, PageThree, PageFour, PageFive):
             frame = F(container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -34,24 +42,38 @@ class Main(tk.Tk):
         self.show_frame(StartPage)
         
     def show_frame(self, cont):
-        
+        """Shows StartPage 
+        """
         frame = self.frames[cont]
         frame.tkraise()
     
     def get_page(self, page_name):
+        """Iterates through the classes(pages) and acquires the values from that page
+        """
         for page in self.frames.values():
             if str(page.__class__.__name__) == page_name:
                 return page
         return None      
     
 class StartPage(tk.Frame):
-    
+    """Start Page of the GUI.
+            
+    Attributes:
+        controller(parent): Object that is designed to act as a common point of interaction for several pages of widgets
+    """
     def __init__(self, parent, controller):
+        """Initializes constructor for class.
+            
+        Attributes:
+            controller(parent): Object that is designed to act as a common point of interaction for several pages of widgets
+        """
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.make_widget(controller)
         
     def make_widget(self, controller):
+        """Welcome screen for the start of GUI
+        """
         label = tk.Label(self, text="Welcome to our app!", font=LARGE_FONT)
         label.pack(pady=10,padx=10)
         
@@ -62,7 +84,12 @@ class StartPage(tk.Frame):
         quit_program.pack()
 
 class PageOne(tk.Frame):
-
+    """Page One of the GUI, used to acquire address in different class.
+            
+    Attributes:
+        controller(parent): Object that is designed to act as a common point of interaction for several pages of widgets
+        address(Entry): Entry box that contains the address of the user
+    """
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller               
@@ -91,11 +118,24 @@ class PageOne(tk.Frame):
         quit_program.pack()
     
     def next_page(self):
+        """Method used to go to next page.
+        """
         self.controller.show_frame(PageTwo)
         
 class PageTwo(tk.Frame):
-
+    """Page Two of the GUI, used to acquire type of place in different class.
+            
+    Attributes:
+        controller(parent): Object that is designed to act as a common point of interaction for several pages of widgets.
+        type_of_place(Entry): Entry box that contains the type of place from the user.
+    """
     def __init__(self, parent, controller):
+        """Initializes constructor for class.
+            
+        Attributes:
+            controller(parent): Object that is designed to act as a common point of interaction for several pages of widgets.
+            type_of_place(Entry): Entry box that contains the type of place from the user.
+        """
         tk.Frame.__init__(self, parent)
         self.controller = controller
         
@@ -123,11 +163,24 @@ class PageTwo(tk.Frame):
         quit_program.pack()
         
     def next_page(self):
+        """Method used to go to next page.
+        """
         self.controller.show_frame(PageThree)
             
 class PageThree(tk.Frame):
-
+    """Page Three of the GUI, used to acquire type of item in different class.
+            
+    Attributes:
+        controller(parent): Object that is designed to act as a common point of interaction for several pages of widgets.
+        type_of_item(Entry): Entry box that contains the type of item from the user.
+    """
     def __init__(self, parent, controller):
+        """Initializes constructor for class.
+            
+        Attributes:
+            controller(parent): Object that is designed to act as a common point of interaction for several pages of widgets.
+            type_of_item(Entry): Entry box that contains the type of item from the user.
+        """
         tk.Frame.__init__(self, parent)
         self.controller = controller
   
@@ -155,35 +208,30 @@ class PageThree(tk.Frame):
         quit_program.pack()
         
     def next_page(self):
-        self.controller.show_frame(PageFive)
-        
-#class PageFour(tk.Frame):
-
-    #def __init__(self, parent, controller):
-        #tk.Frame.__init__(self, parent)
-        #self.controller = controller
-        
-        #label = tk.Label(self, text="What store did you purchase from?", font=LARGE_FONT)
-        #label.pack(pady=10,padx=10)
-        
-        #next_page = ttk.Button(self, text="Next", command=lambda: controller.show_frame(PageFive))
-        #next_page.pack()
-        
-        #back = ttk.Button(self, text="Back",
-                            #command=lambda: controller.show_frame(PageTwo))
-        #back.pack()
-        
-        #home = ttk.Button(self, text="Back to Home",
-                            #command=lambda: controller.show_frame(StartPage))
-        #home.pack()
-        
-        #quit_program = ttk.Button(self, text="Quit", command=quit)
-        #quit_program.pack()
-
-        
-class PageFive(tk.Frame):
-
+        """Method used to go to next page.
+        """
+        self.controller.show_frame(PageFour)
+      
+class PageFour(tk.Frame):
+    """Page Four of the GUI, used to acquire user information in different class.
+            
+    Attributes:
+        controller(parent): Object that is designed to act as a common point of interaction for several pages of widgets.
+        name_entry(Entry): Entry box that contains the name of the user.
+        email(Entry): Entry box that contains the email of the user.
+        phone(Entry): Entry box that contains the number of the user.
+        myCal(Calendar): Tkinter Calendar for user to select date.
+    """
     def __init__(self, parent, controller):
+        """Initializes constructor for class.
+            
+        Attributes:
+            controller(parent): Object that is designed to act as a common point of interaction for several pages of widgets.
+            name_entry(Entry): Entry box that contains the name of the user.
+            email(Entry): Entry box that contains the email of the user.
+            phone(Entry): Entry box that contains the number of the user.
+            myCal(Calendar): Tkinter Calendar for user to select date.
+        """
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
@@ -208,10 +256,10 @@ class PageFive(tk.Frame):
         self.phone = tk.Entry(self)
         self.phone.pack()
         
-        self.myCal = tcal.Calendar(self, setmode = "day'", date_pattern = "mm/dd/yy") #self. makes attribute - ref anytime in class
+        self.myCal = tcal.Calendar(self, setmode = "day'", date_pattern = "mm/dd/yy") 
         self.myCal.pack(pady = 10)
         
-        next_page = ttk.Button(self, text = "Next", command=lambda: controller.show_frame(PageSix)) #remove () to not run function by default
+        next_page = ttk.Button(self, text = "Next", command=lambda: controller.show_frame(PageFive)) 
         next_page.pack()
         
         
@@ -227,10 +275,29 @@ class PageFive(tk.Frame):
         button4.pack()
         
     def next_page(self):
-        self.controller.show_frame(PageSix)
+        """Method used to go to next page.
+        """
+        self.controller.show_frame(PageFive)
 
-class PageSix(tk.Frame):
+class PageFive(tk.Frame):
+    """Page Five of the GUI, used to show all the information the user has inputted, also shows the stores and price/time.
+            
+    Attributes:
+        controller(parent): Object that is designed to act as a common point of interaction for several pages of widgets.
+        user_address(str): The user's address.
+        type_of_place(str): The user's choice for type of place.
+        type_of_item(str): The user's choice for type of item.
+        name(str): The user's name.
+        email_address(str): The user's email address.
+        phone_number(str): The user's phone number.
+        date_picked(str): The user's date picked for the delivery.
+    """
     def __init__(self, parent, controller):
+        """Initializes constructor for class.
+            
+        Attributes:
+            controller(parent): Object that is designed to act as a common point of interaction for several pages of widgets.
+        """
         tk.Frame.__init__(self, parent)
         self.controller = controller
         
@@ -242,6 +309,20 @@ class PageSix(tk.Frame):
 
         
     def show_information(self):
+        """Displays all the information that the user has selected in GUI, pops up store menu in GUI and prints time and price into console.
+            
+        Attributes:
+            user_address(str): The user's address.
+            type_of_place(str): The user's choice for type of place.
+            type_of_item(str): The user's choice for type of item.
+            name(str): The user's name.
+            email_address(str): The user's email address.
+            phone_number(str): The user's phone number.
+            date_picked(str): The user's date picked for the delivery.
+            
+        Side Effects:
+            Print's Price and Time
+        """
         pageone = self.controller.get_page("PageOne")
         user_address = pageone.address.get()
         
@@ -251,12 +332,11 @@ class PageSix(tk.Frame):
         pagethree = self.controller.get_page("PageThree")
         type_of_item = pagethree.type_of_item.get()
         
-        
-        pagefive = self.controller.get_page("PageFive")
-        name = pagefive.name_entry.get()
-        email_address = pagefive.email.get()
-        phone_number = pagefive.phone.get()
-        date_picked = pagefive.myCal.get_date()
+        pagefour = self.controller.get_page("PageFour")
+        name = pagefour.name_entry.get()
+        email_address = pagefour.email.get()
+        phone_number = pagefour.phone.get()
+        date_picked = pagefour.myCal.get_date()
         
         receipt_order_num = tk.Label(self,text = ('Order #'+str(random.randint(1000,6000))))
         receipt_order_num.pack()
@@ -288,8 +368,7 @@ class PageSix(tk.Frame):
         button2 = ttk.Button(self, text="Quit", command=quit)
         button2.pack()
         
-        
-        get_info.get_info(user_address,type_of_place,type_of_item)
+        get_address.get_address(user_address,type_of_place,type_of_item)
         
 if __name__ == '__main__':
     app = Main()
