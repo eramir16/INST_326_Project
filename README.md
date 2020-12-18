@@ -3,7 +3,7 @@
 
 Modules to libraries
 -----------
-pip install tkinter
+pip install tkinter 
 pip install json
 pip install requests
 pip install random
@@ -21,3 +21,4 @@ For example, If you were to put hardware for type of place, you can enter Drywal
 
 
 Script requires api which is a global variable. 
+
