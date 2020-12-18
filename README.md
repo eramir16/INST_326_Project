@@ -6,8 +6,11 @@ Modules to libraries
 pip install tkinter 
 
 pip install json
+
 pip install requests
+
 pip install random
+
 pip install tkcalendar
 
 Quick Start 
