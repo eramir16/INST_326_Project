@@ -1,7 +1,6 @@
 # INST_326_Project
 
-
-Modules to libraries
+Libraries to import
 -----------
 pip install tkinter 
 
