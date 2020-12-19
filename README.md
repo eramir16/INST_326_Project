@@ -59,8 +59,14 @@ Annotated Bibliography
 -----------
 
 “Google APIs Explorer.” Google.com, 2019, developers.google.com/apis-explorer/. Accessed 3 Feb. 2019.
+
+
 This website provides various insights into Google Geocode, Place, and Direction API’s. We utilized these various application programming interfaces so that we would be able to provide real-life utility in our code from travel time to store locations in a user’s proximity. This was extremely useful and necessary for our program.
+
+
 TKinter.com – Learn to Build GUI Apps WIth Tkinter and Python! tkinter.com/.
+
+
 	This website provides various insights into the Tkinter library within python. We utilized this website in order to better educate ourselves with regards to the versatility and implementation factors which Tkinter has to offer. The usage of the information obtained from this site is most prominent in our GUI. Though very useful and informative, minor additional resources were required for further Tkinter usage within our program.
 
 
