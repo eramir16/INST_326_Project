@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import*
 
 
-api_key = 'AIzaSyAPrM0MRPX0xq7yUuF94oot5EkcKT8iuCc'
+
 def get_address(get_address,place,item):
   """ accessing three of google's apis to get customers pickup location and item around address within a 9500m (6miles) radius. 
   
@@ -130,3 +130,6 @@ def get_address(get_address,place,item):
 
 if __name__ == "__main__":
   get_address(get_address,get_address,get_address)
+
+  
+  api_key = 'YOUR_API_KEY'
