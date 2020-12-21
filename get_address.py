@@ -129,7 +129,8 @@ def get_address(get_address,place,item):
 
 
 if __name__ == "__main__":
-  get_address(get_address,get_address,get_address)
+    api_key = 'YOUR_API_KEY'
+    get_address(get_address,get_address,get_address)
 
   
-  api_key = 'YOUR_API_KEY'
+  
