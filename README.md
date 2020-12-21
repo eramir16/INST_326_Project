@@ -14,7 +14,7 @@ pip install tkcalendar
 
 Quick Start 
 -----------
-Please add the api key in the if name == main in get_address script. (api_key="YOUR_API_KEY")
+Please add the api key on Line 8 in get_address.py !
 
 When entering in an address please use this setup : 101 Halpine Road Rockville MD 
 Please capitalize first letter in every word. Two state letter abbreviation should be Capitalized.
