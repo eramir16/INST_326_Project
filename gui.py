@@ -4,7 +4,7 @@ import re
 import requests
 import json 
 import tkcalendar as tcal
-import get_address_test
+import get_address
 import random
 
 #101 Halpine Road Rockville MD
@@ -371,7 +371,7 @@ class PageFive(tk.Frame):
         button2 = ttk.Button(self, text="Quit", command=quit)
         button2.pack()
         
-        get_address_test.get_address(user_address,type_of_place,type_of_item)
+        get_address.get_address(user_address,type_of_place,type_of_item)
         
 if __name__ == '__main__':
     app = Main()
